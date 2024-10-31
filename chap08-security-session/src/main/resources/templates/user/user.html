@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--타임리프에서 시큐리티쓰려구 안쓰면 못씀-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div sec:authorize="hasAnyAuthority('USER')">
+    <p>환영합니다. 유저여</p>
+</div>
+</body>
+</html>
