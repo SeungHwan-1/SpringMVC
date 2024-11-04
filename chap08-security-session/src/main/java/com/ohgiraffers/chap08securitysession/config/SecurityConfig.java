@@ -51,7 +51,7 @@ public class SecurityConfig {
             auth.anyRequest().authenticated(); // 모든 요청을 인증된 사용자에게만 허용해주겠다
         }).formLogin(login->{
             login.loginPage("/auth/login");
-            //겟요청이있으면그거해당하는요청을 처리해주겠다?
+            //포스트요청이있으면그거해당하는요청을 처리해주겠다? vh
             login.usernameParameter("user");
             login.passwordParameter("pass");
             login.defaultSuccessUrl("/"); //로그인 성공 시 보낼 곳 설정 mapping이 존재해야함.

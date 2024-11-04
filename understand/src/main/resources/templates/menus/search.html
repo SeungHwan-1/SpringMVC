@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>검색 예제</title>
+    <style>
+        #suggestions {
+            border: 1px solid #ccc;
+            display: none; /* 초기에는 숨김 */
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute; /* 위치 조정 */
+            background: white; /* 배경색을 흰색으로 설정 */
+            z-index: 1000;
+        }
+
+        .suggestion-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f0f0f0; /* 마우스 오버 시 배경색 변화 */
+        }
+    </style>
+</head>
+<body>
+<h1>검색</h1>
+<form id="searchForm" action="/menus/search" method="post" onsubmit="return handleSubmit();">
+    코드 : <input type="text" name="code" id="codeInput" oninput="showSuggestions()" autocomplete="off"/><br/>
+    <button type="submit">전송하기</button>
+</form>
+<div id="suggestions"></div> <!-- 추천 결과를 보여줄 부분 -->
+
+<script>
+    function showSuggestions() {
+        const code = document.getElementById('codeInput').value;
+        const suggestionsDiv = document.getElementById('suggestions');
+
+        if (code) {
+            fetch(`/menus/suggestions?code=${encodeURIComponent(code)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('서버 오류: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data); // 데이터 구조 확인
+                    suggestionsDiv.textContent = ''; // 이전 추천 결과 초기화
+                    if (data && data.length > 0) {
+                        data.forEach(menu => {
+                            console.log(menu); // 각 메뉴 확인
+                            const item = document.createElement('div');
+                            item.className = 'suggestion-item';
+                            item.textContent = menu.code; // 메뉴 이름 표시
+                            item.onclick = () => selectSuggestion(menu.code);// 클릭 시 선택
+                            console.log(menu.code);
+                            suggestionsDiv.appendChild(item);
+                        });
+                        suggestionsDiv.style.display = 'block'; // 추천 결과 표시
+                    } else {
+                        suggestionsDiv.style.display = 'none'; // 추천 결과 숨김
+                    }
+                })
+                .catch(error => {
+                    console.error('AJAX 오류:', error);
+                    suggestionsDiv.style.display = 'none'; // 오류 발생 시 숨김
+                });
+        } else {
+            suggestionsDiv.textContent = '';
+            suggestionsDiv.style.display = 'none'; // 입력이 없을 경우 숨김
+        }
+    }
+
+    function selectSuggestion(menuCode) {
+        console.log(menuCode);
+        document.getElementById('codeInput').value = menuCode; // 입력창에 선택한 코드 삽입
+        document.getElementById('suggestions').style.display = 'none'; // 추천 결과 숨김
+    }
+
+    function handleSubmit() {
+        // 폼 제출 전 추가 로직이 필요하다면 여기에 작성
+        return true; // 폼을 정상적으로 제출
+    }
+</script>
+</body>
+</html>

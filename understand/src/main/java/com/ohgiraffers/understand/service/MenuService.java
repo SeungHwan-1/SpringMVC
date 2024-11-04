@@ -70,4 +70,13 @@ public class MenuService {
 
         return result;
     }
+
+    public  List<MenuDTO> searchOneMenu(String code) {
+        List<MenuDTO> menu =menuDAO.searchOneMenu(code);
+        return menu;
+    }
+
+    public List<MenuDTO> getMenuSuggestions(String code) {
+        return menuDAO.searchOneMenu(code);
+    }
 }

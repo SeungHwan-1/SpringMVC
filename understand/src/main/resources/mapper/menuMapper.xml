@@ -62,6 +62,17 @@
         DELETE FROM TBL_MENU
         WHERE  MENU_CODE = #{ code }
     </delete>
+    <select id="searchOneMenu" resultMap="menuResult">
+        SELECT
+        MENU_CODE,
+        MENU_NAME,
+        MENU_PRICE,
+        CATEGORY_CODE,
+        ORDERABLE_STATUS
+        FROM TBL_MENU
+        WHERE ORDERABLE_STATUS = 'Y'
+        AND MENU_CODE LIKE '%' #{code} '%'
+    </select>
 
 
 

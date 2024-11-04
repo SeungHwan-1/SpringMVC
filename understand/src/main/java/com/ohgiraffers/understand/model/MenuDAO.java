@@ -16,4 +16,6 @@ public interface MenuDAO {
     int update(MenuDTO menu);
 
     int delete(MenuDTO menu);
+
+    List<MenuDTO> searchOneMenu(String code);
 }
